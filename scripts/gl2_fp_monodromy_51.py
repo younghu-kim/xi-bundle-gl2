@@ -227,8 +227,8 @@ def run_monodromy_experiment(name, sigma_crit, L_func, tp_zeros, t_min, t_max, n
 
 N_COND_11 = 11
 EPS_11 = 1
-N_MAX_11 = 65  # x_n≈1.894n; n=65: e^{-123.1}≈10^{-53} >> dps=50 충분
-DPS_11 = 50    # t≈30에서 AFE 정밀도 확보 (dps<50은 t>22에서 부족)
+N_MAX_11 = 60  # x_n≈1.894n; n=60: e^{-113.6}≈10^{-49} >> dps=45 충분
+DPS_11 = 45    # t≈30에서 최적 (t>25 일부 실패 허용 — 기존 #44 결과로 보완)
 _an_11 = None
 _precomp_11 = None
 
@@ -284,10 +284,10 @@ def _init_11a1():
     print(f"  [11a1 초기화] a₂={an[2]}, a₃={an[3]}, a₅={an[5]}, a₇={an[7]}, a₁₁={an[11]}", flush=True)
 
 def Lambda_11a1(s):
-    _init_11a1()
     saved_dps = mpmath.mp.dps
-    mpmath.mp.dps = DPS_11
+    mpmath.mp.dps = DPS_11  # ← _init 전에 dps 설정 (precomp 정밀도 확보)
     try:
+        _init_11a1()
         s_mp = mpmath.mpc(s)
         s_conj = 2 - s_mp
         eps = mpmath.mpf(EPS_11)
@@ -307,8 +307,8 @@ def Lambda_11a1(s):
 
 N_COND_37 = 37
 EPS_37 = -1
-N_MAX_37 = 115  # x_n≈1.033n; n=115: e^{-118.8}≈10^{-52} >> dps=50 충분
-DPS_37 = 50     # t≈30에서 AFE 정밀도 확보
+N_MAX_37 = 100  # x_n≈1.033n; n=100: e^{-103}≈10^{-45} >> dps=45 충분
+DPS_37 = 45     # t≈30에서 최적
 _an_37 = None
 _precomp_37 = None
 
@@ -367,10 +367,10 @@ def _init_37a1():
     print(f"  a₂={an[2]}, a₃={an[3]}, a₅={an[5]}, a₃₇={an[37]}", flush=True)
 
 def Lambda_37a1(s):
-    _init_37a1()
     saved_dps = mpmath.mp.dps
-    mpmath.mp.dps = DPS_37
+    mpmath.mp.dps = DPS_37  # ← _init 전에 dps 설정
     try:
+        _init_37a1()
         s_mp = mpmath.mpc(s)
         s_conj = 2 - s_mp
         eps = mpmath.mpf(EPS_37)
@@ -452,10 +452,10 @@ def _init_delta():
     print(f"  [Δ 초기화] 비영 항: {len(_precomp_delta)}개 (N_MAX={N_MAX_DELTA})", flush=True)
 
 def Lambda_Delta(s):
-    _init_delta()
     saved_dps = mpmath.mp.dps
-    mpmath.mp.dps = DPS_DELTA
+    mpmath.mp.dps = DPS_DELTA  # ← _init 전에 dps 설정
     try:
+        _init_delta()
         s_mp = mpmath.mpc(s)
         s_conj = mpmath.mpf(WEIGHT_DELTA) - s_mp  # 12 - s
         eps = mpmath.mpf(EPS_DELTA)
